@@ -2,20 +2,22 @@ package main
 
 import (
 	"fmt"
-	"labcode-test-case/internal/controller"
+	"labcode-test-case/internal/handler"
 	"net/http"
 )
 
 type Server struct {
-	cameraController *controller.CameraController
-	areaController   *controller.AreaController
+	cameraHandler *handler.CameraHandler
+	areaHandler   *handler.AreaHandler
 }
 
 func main() {
+	mux := http.NewServeMux()
+
 	server := &Server{}
-	server.cameraController = controller.NewCameraController()
-	server.areaController = controller.NewAreaController()
+	server.cameraHandler = handler.NewCameraHandler(mux)
+	server.areaHandler = handler.NewAreaHandler(mux)
 
 	fmt.Println("Listening on port 8080")
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", mux)
 }
