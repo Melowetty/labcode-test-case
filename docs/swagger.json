@@ -1,0 +1,557 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is solution of labcode test case",
+        "title": "Labcode test case",
+        "contact": {
+            "name": "Melowetty",
+            "url": "https://github.com/melowetty",
+            "email": "melowetty@mail.ru"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/area": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Зоны"
+                ],
+                "summary": "Get areas",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.AreaShort"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Зона"
+                ],
+                "summary": "Update area",
+                "parameters": [
+                    {
+                        "description": "Area JSON",
+                        "name": "area",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateAreaRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AreaDetailed"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Зоны"
+                ],
+                "summary": "Create area",
+                "parameters": [
+                    {
+                        "description": "Area JSON",
+                        "name": "area",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateAreaRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AreaDetailed"
+                        }
+                    }
+                }
+            }
+        },
+        "/area/{area_id}/camera": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Камеры"
+                ],
+                "summary": "Create camera",
+                "parameters": [
+                    {
+                        "description": "Camera JSON",
+                        "name": "area",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateCameraRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "area_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Camera"
+                        }
+                    }
+                }
+            }
+        },
+        "/area/{area_id}/camera/{camera_id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Камеры"
+                ],
+                "summary": "Get camera",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "area_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "camera id",
+                        "name": "camera_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Camera"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Камеры"
+                ],
+                "summary": "Update camera",
+                "parameters": [
+                    {
+                        "description": "Camera JSON",
+                        "name": "area",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateCameraRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "area_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "camera id",
+                        "name": "camera_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Camera"
+                        }
+                    }
+                }
+            }
+        },
+        "/area/{area_id}/{camera_id}": {
+            "delete": {
+                "tags": [
+                    "Камеры"
+                ],
+                "summary": "Delete camera",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "area_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "camera id",
+                        "name": "camera_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/area/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Зоны"
+                ],
+                "summary": "Get area info",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AreaDetailed"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Зоны"
+                ],
+                "summary": "Delete area by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.AreaDetailed": {
+            "type": "object",
+            "properties": {
+                "cameras": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Camera"
+                    }
+                },
+                "cords": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.GeoCords"
+                    }
+                },
+                "create_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "update_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.AreaShort": {
+            "type": "object",
+            "properties": {
+                "cords": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.GeoCords"
+                    }
+                },
+                "create_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "update_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.Camera": {
+            "type": "object",
+            "properties": {
+                "altitude": {
+                    "type": "number"
+                },
+                "angle": {
+                    "type": "number"
+                },
+                "area_id": {
+                    "type": "integer"
+                },
+                "create_date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "radius": {
+                    "type": "number"
+                },
+                "sector_angle": {
+                    "type": "number"
+                },
+                "update_date": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GeoCords": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.CreateAreaRequest": {
+            "type": "object",
+            "required": [
+                "cords",
+                "is_active",
+                "name"
+            ],
+            "properties": {
+                "cords": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.GeoCordsRequest"
+                    }
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.CreateCameraRequest": {
+            "type": "object",
+            "required": [
+                "altitude",
+                "angle",
+                "ip",
+                "is_active",
+                "latitude",
+                "longitude",
+                "name",
+                "radius",
+                "sector_angle"
+            ],
+            "properties": {
+                "altitude": {
+                    "type": "number"
+                },
+                "angle": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "radius": {
+                    "type": "number"
+                },
+                "sector_angle": {
+                    "type": "number",
+                    "minimum": 0
+                }
+            }
+        },
+        "model.GeoCordsRequest": {
+            "type": "object",
+            "required": [
+                "latitude",
+                "longitude"
+            ],
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.UpdateAreaRequest": {
+            "type": "object",
+            "required": [
+                "cords",
+                "is_active",
+                "name"
+            ],
+            "properties": {
+                "cords": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.GeoCordsRequest"
+                    }
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateCameraRequest": {
+            "type": "object",
+            "required": [
+                "altitude",
+                "angle",
+                "ip",
+                "is_active",
+                "latitude",
+                "longitude",
+                "name",
+                "radius",
+                "sector_angle"
+            ],
+            "properties": {
+                "altitude": {
+                    "type": "number"
+                },
+                "angle": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "radius": {
+                    "type": "number"
+                },
+                "sector_angle": {
+                    "type": "number",
+                    "minimum": 0
+                }
+            }
+        }
+    }
+}

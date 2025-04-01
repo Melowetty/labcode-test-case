@@ -1,0 +1,373 @@
+basePath: /
+definitions:
+  dto.AreaDetailed:
+    properties:
+      cameras:
+        items:
+          $ref: '#/definitions/dto.Camera'
+        type: array
+      cords:
+        items:
+          $ref: '#/definitions/dto.GeoCords'
+        type: array
+      create_date:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      name:
+        type: string
+      update_date:
+        type: string
+    type: object
+  dto.AreaShort:
+    properties:
+      cords:
+        items:
+          $ref: '#/definitions/dto.GeoCords'
+        type: array
+      create_date:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      name:
+        type: string
+      update_date:
+        type: string
+    type: object
+  dto.Camera:
+    properties:
+      altitude:
+        type: number
+      angle:
+        type: number
+      area_id:
+        type: integer
+      create_date:
+        type: string
+      id:
+        type: integer
+      ip:
+        type: string
+      is_active:
+        type: boolean
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      radius:
+        type: number
+      sector_angle:
+        type: number
+      update_date:
+        type: string
+    type: object
+  dto.GeoCords:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  model.CreateAreaRequest:
+    properties:
+      cords:
+        items:
+          $ref: '#/definitions/model.GeoCordsRequest'
+        type: array
+      is_active:
+        type: boolean
+      name:
+        type: string
+    required:
+    - cords
+    - is_active
+    - name
+    type: object
+  model.CreateCameraRequest:
+    properties:
+      altitude:
+        type: number
+      angle:
+        minimum: 0
+        type: number
+      ip:
+        type: string
+      is_active:
+        type: boolean
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      radius:
+        type: number
+      sector_angle:
+        minimum: 0
+        type: number
+    required:
+    - altitude
+    - angle
+    - ip
+    - is_active
+    - latitude
+    - longitude
+    - name
+    - radius
+    - sector_angle
+    type: object
+  model.GeoCordsRequest:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    required:
+    - latitude
+    - longitude
+    type: object
+  model.UpdateAreaRequest:
+    properties:
+      cords:
+        items:
+          $ref: '#/definitions/model.GeoCordsRequest'
+        type: array
+      is_active:
+        type: boolean
+      name:
+        type: string
+    required:
+    - cords
+    - is_active
+    - name
+    type: object
+  model.UpdateCameraRequest:
+    properties:
+      altitude:
+        type: number
+      angle:
+        minimum: 0
+        type: number
+      ip:
+        type: string
+      is_active:
+        type: boolean
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      radius:
+        type: number
+      sector_angle:
+        minimum: 0
+        type: number
+    required:
+    - altitude
+    - angle
+    - ip
+    - is_active
+    - latitude
+    - longitude
+    - name
+    - radius
+    - sector_angle
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: melowetty@mail.ru
+    name: Melowetty
+    url: https://github.com/melowetty
+  description: This is solution of labcode test case
+  title: Labcode test case
+  version: "1.0"
+paths:
+  /area:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.AreaShort'
+            type: array
+      summary: Get areas
+      tags:
+      - Зоны
+    post:
+      parameters:
+      - description: Area JSON
+        in: body
+        name: area
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateAreaRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AreaDetailed'
+      summary: Create area
+      tags:
+      - Зоны
+    put:
+      parameters:
+      - description: Area JSON
+        in: body
+        name: area
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateAreaRequest'
+      - description: area id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AreaDetailed'
+      summary: Update area
+      tags:
+      - Зона
+  /area/{area_id}/{camera_id}:
+    delete:
+      parameters:
+      - description: area id
+        in: path
+        name: area_id
+        required: true
+        type: integer
+      - description: camera id
+        in: path
+        name: camera_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Delete camera
+      tags:
+      - Камеры
+  /area/{area_id}/camera:
+    post:
+      parameters:
+      - description: Camera JSON
+        in: body
+        name: area
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateCameraRequest'
+      - description: area id
+        in: path
+        name: area_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Camera'
+      summary: Create camera
+      tags:
+      - Камеры
+  /area/{area_id}/camera/{camera_id}:
+    get:
+      parameters:
+      - description: area id
+        in: path
+        name: area_id
+        required: true
+        type: integer
+      - description: camera id
+        in: path
+        name: camera_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Camera'
+      summary: Get camera
+      tags:
+      - Камеры
+    put:
+      parameters:
+      - description: Camera JSON
+        in: body
+        name: area
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateCameraRequest'
+      - description: area id
+        in: path
+        name: area_id
+        required: true
+        type: integer
+      - description: camera id
+        in: path
+        name: camera_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Camera'
+      summary: Update camera
+      tags:
+      - Камеры
+  /area/{id}:
+    delete:
+      parameters:
+      - description: area id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Delete area by id
+      tags:
+      - Зоны
+    get:
+      parameters:
+      - description: area id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AreaDetailed'
+      summary: Get area info
+      tags:
+      - Зоны
+swagger: "2.0"
