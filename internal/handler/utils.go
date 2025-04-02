@@ -11,6 +11,10 @@ import (
 	"strings"
 )
 
+const (
+	InternalServerErrorMessage = "Internal server error"
+)
+
 func parsePathValueAsInt(validate *validator.Validate, r *http.Request, path string) (int, error) {
 	value, err := strconv.Atoi(r.PathValue(path))
 
@@ -70,4 +74,8 @@ func writeError(w http.ResponseWriter, message string, status int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	w.Write(jsonData)
+}
+
+func writeInternalServerError(w http.ResponseWriter) {
+	writeError(w, InternalServerErrorMessage, http.StatusInternalServerError)
 }

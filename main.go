@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"labcode-test-case/internal/handler"
+	"labcode-test-case/internal/service"
 	"net/http"
 )
 
@@ -26,9 +27,11 @@ func main() {
 	mux := http.NewServeMux()
 	validate := validator.New()
 
+	areaService := service.AreaService{}
+
 	server := &Server{}
 	server.cameraHandler = handler.NewCameraHandler(mux, validate)
-	server.areaHandler = handler.NewAreaHandler(mux, validate)
+	server.areaHandler = handler.NewAreaHandler(mux, validate, &areaService)
 
 	fmt.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", mux)
