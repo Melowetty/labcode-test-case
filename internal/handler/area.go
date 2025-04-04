@@ -33,21 +33,21 @@ func NewAreaHandler(mux *http.ServeMux, validate *validator.Validate, areaServic
 }
 
 func (a *AreaHandler) initRouter(mux *http.ServeMux) {
-	mux.HandleFunc("GET /area", a.getAreasInfo)
-	mux.HandleFunc("GET /area/{id}", a.getAreaInfo)
-	mux.HandleFunc("POST /area", a.createArea)
-	mux.HandleFunc("DELETE /area", a.deleteArea)
-	mux.HandleFunc("PUT /area/{id}", a.updateArea)
+	mux.HandleFunc("GET /area", a.GetAreasInfo)
+	mux.HandleFunc("GET /area/{id}", a.GetAreaInfo)
+	mux.HandleFunc("POST /area", a.CreateArea)
+	mux.HandleFunc("DELETE /area", a.DeleteArea)
+	mux.HandleFunc("PUT /area/{id}", a.UpdateArea)
 }
 
-// @Summary Update area
+// UpdateArea @Summary Update area
 // @Tags Зона
 // @Param area  body      model.UpdateAreaRequest  true  "Area JSON"
 // @Param id  path      int  true  "area id"
 // @Produce json
 // @Success 200 {object} dto.AreaDetailed
 // @Router /area/{id} [put]
-func (a *AreaHandler) updateArea(w http.ResponseWriter, r *http.Request) {
+func (a *AreaHandler) UpdateArea(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(a.validate, r, "id")
 	if err != nil {
 		writeError(w, AreaIdValidatorError, http.StatusBadRequest)
@@ -75,16 +75,15 @@ func (a *AreaHandler) updateArea(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "Area updated + %#v", area)
-	w.WriteHeader(http.StatusOK)
+	writeOkJsonResponse(w, area)
 }
 
-// @Summary      Delete area by id
+// DeleteArea @Summary      Delete area by id
 // @Tags Зоны
 // @Param        id  path      int  true  "area id"
 // @Success      200
 // @Router       /area/{id} [delete]
-func (a *AreaHandler) deleteArea(w http.ResponseWriter, r *http.Request) {
+func (a *AreaHandler) DeleteArea(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(a.validate, r, "id")
 	if err != nil {
 		writeError(w, AreaIdValidatorError, http.StatusBadRequest)
@@ -100,13 +99,13 @@ func (a *AreaHandler) deleteArea(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// @Summary Create area
+// CreateArea @Summary Create area
 // @Tags Зоны
 // @Param area  body      model.CreateAreaRequest  true  "Area JSON"
 // @Produce json
 // @Success 200 {object} dto.AreaDetailed
 // @Router /area [post]
-func (a *AreaHandler) createArea(w http.ResponseWriter, r *http.Request) {
+func (a *AreaHandler) CreateArea(w http.ResponseWriter, r *http.Request) {
 	var request model.CreateAreaRequest
 	err := parseBody(r, &request)
 	if err != nil {
@@ -128,31 +127,31 @@ func (a *AreaHandler) createArea(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "Area created + %#v", area)
+	writeOkJsonResponse(w, area)
 }
 
-// @Summary Get areas
+// GetAreasInfo @Summary Get areas
 // @Tags Зоны
 // @Produce json
 // @Success 200 {array} dto.AreaShort
 // @Router /area [get]
-func (a *AreaHandler) getAreasInfo(w http.ResponseWriter, r *http.Request) {
+func (a *AreaHandler) GetAreasInfo(w http.ResponseWriter, r *http.Request) {
 	areas, err := a.areaService.GetAreas()
 	if err != nil {
 		processErrorResponse(w, err)
 		return
 	}
 
-	fmt.Fprintln(w, "Areas get "+string(rune(len(areas))))
+	writeOkJsonResponse(w, areas)
 }
 
-// @Summary Get area info
+// GetAreaInfo @Summary Get area info
 // @Tags Зоны
 // @Param        id  path      int  true  "area id"
 // @Produce json
 // @Success 200 {object} dto.AreaDetailed
 // @Router /area/{id} [get]
-func (a *AreaHandler) getAreaInfo(w http.ResponseWriter, r *http.Request) {
+func (a *AreaHandler) GetAreaInfo(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(a.validate, r, "id")
 	if err != nil {
 		writeError(w, AreaIdValidatorError, http.StatusBadRequest)
@@ -165,7 +164,7 @@ func (a *AreaHandler) getAreaInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "Area get %#v", area)
+	writeOkJsonResponse(w, area)
 }
 
 func processErrorResponse(w http.ResponseWriter, err error) {

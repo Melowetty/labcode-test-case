@@ -6,7 +6,7 @@ type Camera struct {
 	Altitude    float32
 	Angle       float32
 	AreaId      int
-	CreateDate  time.Time
+	CreatedDate time.Time
 	Id          int
 	Ip          string
 	IsActive    bool
@@ -15,5 +15,5 @@ type Camera struct {
 	Name        string
 	Radius      float32
 	SectorAngle float32
-	UpdateDate  time.Time
+	UpdatedDate time.Time
 }

@@ -1,13 +1,13 @@
 package model
 
 type CreateAreaRequest struct {
-	Cords    []GeoCordsRequest `json:"cords" validate:"required,dive,required"`
+	Cords    []GeoCordsRequest `json:"cords" validate:"required,min=3,dive,required"`
 	IsActive *bool             `json:"is_active" validate:"required"`
 	Name     string            `json:"name" validate:"required"`
 }
 
 type UpdateAreaRequest struct {
-	Cords    []GeoCordsRequest `json:"cords" validate:"required,dive,required"`
+	Cords    []GeoCordsRequest `json:"cords" validate:"required,min=3,dive,required"`
 	IsActive *bool             `json:"is_active" validate:"required"`
 	Name     string            `json:"name" validate:"required"`
 }
