@@ -36,7 +36,7 @@ func (a *AreaHandler) initRouter(mux *http.ServeMux) {
 	mux.HandleFunc("GET /area", a.GetAreasInfo)
 	mux.HandleFunc("GET /area/{id}", a.GetAreaInfo)
 	mux.HandleFunc("POST /area", a.CreateArea)
-	mux.HandleFunc("DELETE /area", a.DeleteArea)
+	mux.HandleFunc("DELETE /area/{id}", a.DeleteArea)
 	mux.HandleFunc("PUT /area/{id}", a.UpdateArea)
 }
 

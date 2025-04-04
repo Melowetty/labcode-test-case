@@ -10,3 +10,8 @@ type Area struct {
 	Name        string
 	UpdatedDate time.Time
 }
+
+type AreaDetailed struct {
+	Area
+	Cameras []Camera
+}
