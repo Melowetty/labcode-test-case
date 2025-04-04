@@ -65,7 +65,15 @@ func writeValidationErrorsResponse(w http.ResponseWriter, validationErrs validat
 
 func writeError(w http.ResponseWriter, message string, status int) {
 	customErr := &model.CustomError{Message: message}
-	jsonData, err := json.Marshal(customErr)
+	writeJsonResponse(w, customErr, status)
+}
+
+func writeOkJsonResponse(w http.ResponseWriter, data interface{}) {
+	writeJsonResponse(w, data, 200)
+}
+
+func writeJsonResponse(w http.ResponseWriter, data interface{}, status int) {
+	jsonData, err := json.Marshal(data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
