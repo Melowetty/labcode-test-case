@@ -2,8 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
-	"github.com/ansel1/merry"
 	"github.com/go-playground/validator/v10"
 	"labcode-test-case/internal/dto"
 	"labcode-test-case/internal/handler/model"
@@ -24,7 +22,7 @@ type AreaHandler struct {
 }
 
 const (
-	AreaIdValidatorError = "Area id must be integer and greater than 0"
+	areaIdValidatorError = "area id must be integer and greater than 0"
 )
 
 func NewAreaHandler(mux *http.ServeMux, validate *validator.Validate, areaService AreaServiceInterface) *AreaHandler {
@@ -51,21 +49,19 @@ func (a *AreaHandler) initRouter(mux *http.ServeMux) {
 func (a *AreaHandler) UpdateArea(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(a.validate, r, "id")
 	if err != nil {
-		writeError(w, AreaIdValidatorError, http.StatusBadRequest)
+		writeError(w, areaIdValidatorError, http.StatusBadRequest)
 		return
 	}
 
 	var request model.UpdateAreaRequest
 	err = parseBody(r, &request)
 	if err != nil {
-		fmt.Println(err.Error())
 		writeError(w, "Bad body scheme", http.StatusBadRequest)
 		return
 	}
 
 	validationError := validateBody(a.validate, request)
 	if validationError != nil {
-		fmt.Println(validationError.Error())
 		writeValidationErrorsResponse(w, validationError)
 		return
 	}
@@ -88,7 +84,7 @@ func (a *AreaHandler) UpdateArea(w http.ResponseWriter, r *http.Request) {
 func (a *AreaHandler) DeleteArea(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(a.validate, r, "id")
 	if err != nil {
-		writeError(w, AreaIdValidatorError, http.StatusBadRequest)
+		writeError(w, areaIdValidatorError, http.StatusBadRequest)
 		return
 	}
 
@@ -112,14 +108,12 @@ func (a *AreaHandler) CreateArea(w http.ResponseWriter, r *http.Request) {
 	var request model.CreateAreaRequest
 	err := parseBody(r, &request)
 	if err != nil {
-		fmt.Println(err.Error())
 		writeError(w, "Bad body scheme", http.StatusBadRequest)
 		return
 	}
 
 	validationError := validateBody(a.validate, request)
 	if validationError != nil {
-		fmt.Println(validationError.Error())
 		writeValidationErrorsResponse(w, validationError)
 		return
 	}
@@ -159,7 +153,7 @@ func (a *AreaHandler) GetAreasInfo(w http.ResponseWriter, r *http.Request) {
 func (a *AreaHandler) GetAreaInfo(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(a.validate, r, "id")
 	if err != nil {
-		writeError(w, AreaIdValidatorError, http.StatusBadRequest)
+		writeError(w, areaIdValidatorError, http.StatusBadRequest)
 		return
 	}
 
@@ -171,15 +165,4 @@ func (a *AreaHandler) GetAreaInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeOkJsonResponse(w, area)
-}
-
-func processErrorResponse(w http.ResponseWriter, err error) {
-	if merry.Is(err, dto.BaseError) {
-		code := merry.HTTPCode(err)
-		userMessage := merry.UserMessage(err)
-		writeError(w, userMessage, code)
-	} else {
-		fmt.Println(err.Error())
-		writeInternalServerError(w)
-	}
 }

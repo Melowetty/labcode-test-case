@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/ansel1/merry"
 	"github.com/go-playground/validator/v10"
+	"labcode-test-case/internal/dto"
 	"labcode-test-case/internal/handler/model"
 	"net/http"
 	"strconv"
@@ -58,7 +60,6 @@ func writeValidationErrorsResponse(w http.ResponseWriter, validationErrs validat
 	for _, validationError := range validationErrs {
 		failedFields = append(failedFields, validationError.StructField())
 	}
-	fmt.Printf(validationErrs.Error())
 	message := fmt.Sprintf("Validation failed for fields: %s", strings.Join(failedFields[:], ", "))
 	writeError(w, message, http.StatusBadRequest)
 }
@@ -86,4 +87,15 @@ func writeJsonResponse(w http.ResponseWriter, data interface{}, status int) {
 
 func writeInternalServerError(w http.ResponseWriter) {
 	writeError(w, InternalServerErrorMessage, http.StatusInternalServerError)
+}
+
+func processErrorResponse(w http.ResponseWriter, err error) {
+	if merry.Is(err, dto.BaseError) {
+		code := merry.HTTPCode(err)
+		userMessage := merry.UserMessage(err)
+		writeError(w, userMessage, code)
+	} else {
+		fmt.Println(err.Error())
+		writeInternalServerError(w)
+	}
 }
