@@ -1,6 +1,7 @@
 package entity
 
 type GeoCords struct {
-	Latitude  float32
-	Longitude float32
+	AreaId    int     `db:"area_id"`
+	Latitude  float32 `db:"latitude"`
+	Longitude float32 `db:"longitude"`
 }

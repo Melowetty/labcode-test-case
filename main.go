@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/go-playground/validator/v10"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"labcode-test-case/internal/handler"
 	"labcode-test-case/internal/service"
+	"labcode-test-case/internal/storage"
 	"net/http"
+	"os"
 )
 
 type Server struct {
@@ -24,14 +28,24 @@ type Server struct {
 // @host localhost:8080
 // @BasePath /
 func main() {
+	pool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+	defer pool.Close()
+
 	mux := http.NewServeMux()
 	validate := validator.New()
 
-	areaService := service.AreaService{}
+	cameraStorage := storage.NewCameraStorage(pool)
+
+	areaStorage := storage.NewAreaStorage(pool, cameraStorage)
+	areaService := service.NewAreaService(areaStorage)
 
 	server := &Server{}
 	server.cameraHandler = handler.NewCameraHandler(mux, validate)
-	server.areaHandler = handler.NewAreaHandler(mux, validate, &areaService)
+	server.areaHandler = handler.NewAreaHandler(mux, validate, areaService)
 
 	fmt.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", mux)

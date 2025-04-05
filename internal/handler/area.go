@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"fmt"
 	"github.com/ansel1/merry"
 	"github.com/go-playground/validator/v10"
@@ -9,24 +10,24 @@ import (
 	"net/http"
 )
 
-type AreaService interface {
-	CreateArea(request model.CreateAreaRequest) (dto.AreaDetailed, error)
-	UpdateArea(areaId int, request model.UpdateAreaRequest) (dto.AreaDetailed, error)
-	GetArea(areaId int) (dto.AreaDetailed, error)
-	GetAreas() ([]dto.AreaShort, error)
-	DeleteArea(areaId int) error
+type AreaServiceInterface interface {
+	CreateArea(ctx context.Context, request model.CreateAreaRequest) (dto.AreaDetailed, error)
+	UpdateArea(ctx context.Context, areaId int, request model.UpdateAreaRequest) (dto.AreaDetailed, error)
+	GetArea(ctx context.Context, areaId int) (dto.AreaDetailed, error)
+	GetAreas(ctx context.Context) ([]dto.AreaShort, error)
+	DeleteArea(ctx context.Context, areaId int) error
 }
 
 type AreaHandler struct {
 	validate    *validator.Validate
-	areaService AreaService
+	areaService AreaServiceInterface
 }
 
 const (
 	AreaIdValidatorError = "Area id must be integer and greater than 0"
 )
 
-func NewAreaHandler(mux *http.ServeMux, validate *validator.Validate, areaService AreaService) *AreaHandler {
+func NewAreaHandler(mux *http.ServeMux, validate *validator.Validate, areaService AreaServiceInterface) *AreaHandler {
 	controller := &AreaHandler{validate, areaService}
 	controller.initRouter(mux)
 	return controller
@@ -69,7 +70,8 @@ func (a *AreaHandler) UpdateArea(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	area, err := a.areaService.UpdateArea(areaId, request)
+	ctx := r.Context()
+	area, err := a.areaService.UpdateArea(ctx, areaId, request)
 	if err != nil {
 		processErrorResponse(w, err)
 		return
@@ -90,7 +92,8 @@ func (a *AreaHandler) DeleteArea(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	deleteErr := a.areaService.DeleteArea(areaId)
+	ctx := r.Context()
+	deleteErr := a.areaService.DeleteArea(ctx, areaId)
 	if deleteErr != nil {
 		processErrorResponse(w, deleteErr)
 		return
@@ -121,7 +124,8 @@ func (a *AreaHandler) CreateArea(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	area, err := a.areaService.CreateArea(request)
+	ctx := r.Context()
+	area, err := a.areaService.CreateArea(ctx, request)
 	if err != nil {
 		processErrorResponse(w, err)
 		return
@@ -136,7 +140,8 @@ func (a *AreaHandler) CreateArea(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {array} dto.AreaShort
 // @Router /area [get]
 func (a *AreaHandler) GetAreasInfo(w http.ResponseWriter, r *http.Request) {
-	areas, err := a.areaService.GetAreas()
+	ctx := r.Context()
+	areas, err := a.areaService.GetAreas(ctx)
 	if err != nil {
 		processErrorResponse(w, err)
 		return
@@ -158,7 +163,8 @@ func (a *AreaHandler) GetAreaInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	area, err := a.areaService.GetArea(areaId)
+	ctx := r.Context()
+	area, err := a.areaService.GetArea(ctx, areaId)
 	if err != nil {
 		processErrorResponse(w, err)
 		return
