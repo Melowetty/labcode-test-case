@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-playground/validator/v10"
-	"labcode-test-case/internal/entity"
+	"labcode-test-case/internal/dto"
 	"labcode-test-case/internal/handler/model"
 	"net/http"
 )
 
 type CameraServiceInterface interface {
-	GetCamera(ctx context.Context, areaId int, cameraId int) (entity.Camera, error)
-	CreateCamera(ctx context.Context, areaId int, camera model.CreateCameraRequest) (entity.Camera, error)
-	UpdateCamera(ctx context.Context, areaId int, cameraId int, camera model.UpdateCameraRequest) (entity.Camera, error)
+	GetCamera(ctx context.Context, areaId int, cameraId int) (dto.Camera, error)
+	CreateCamera(ctx context.Context, areaId int, camera model.CreateCameraRequest) (dto.Camera, error)
+	UpdateCamera(ctx context.Context, areaId int, cameraId int, camera model.UpdateCameraRequest) (dto.Camera, error)
 	DeleteCamera(ctx context.Context, areaId int, cameraId int) error
 }
 
@@ -151,12 +151,6 @@ func (c *CameraHandler) GetCamera(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := r.Context()
-	deleteErr := c.cameraService.DeleteCamera(ctx, areaId, cameraId)
-	if deleteErr != nil {
-		processErrorResponse(w, deleteErr)
-		return
-	}
-
 	camera, err := c.cameraService.GetCamera(ctx, areaId, cameraId)
 	if err != nil {
 		processErrorResponse(w, err)

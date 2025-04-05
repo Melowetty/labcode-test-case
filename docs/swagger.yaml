@@ -10,7 +10,7 @@ definitions:
         items:
           $ref: '#/definitions/dto.GeoCords'
         type: array
-      create_date:
+      created_date:
         type: string
       id:
         type: integer
@@ -18,7 +18,7 @@ definitions:
         type: boolean
       name:
         type: string
-      update_date:
+      updated_date:
         type: string
     type: object
   dto.AreaShort:
@@ -27,7 +27,7 @@ definitions:
         items:
           $ref: '#/definitions/dto.GeoCords'
         type: array
-      create_date:
+      created_date:
         type: string
       id:
         type: integer
@@ -35,7 +35,7 @@ definitions:
         type: boolean
       name:
         type: string
-      update_date:
+      updated_date:
         type: string
     type: object
   dto.Camera:
@@ -46,7 +46,7 @@ definitions:
         type: number
       area_id:
         type: integer
-      create_date:
+      created_date:
         type: string
       id:
         type: integer
@@ -64,7 +64,7 @@ definitions:
         type: number
       sector_angle:
         type: number
-      update_date:
+      updated_date:
         type: string
     type: object
   dto.GeoCords:
@@ -79,6 +79,7 @@ definitions:
       cords:
         items:
           $ref: '#/definitions/model.GeoCordsRequest'
+        minItems: 3
         type: array
       is_active:
         type: boolean
@@ -94,6 +95,7 @@ definitions:
       altitude:
         type: number
       angle:
+        maximum: 359
         minimum: 0
         type: number
       ip:
@@ -109,6 +111,7 @@ definitions:
       radius:
         type: number
       sector_angle:
+        maximum: 359
         minimum: 0
         type: number
     required:
@@ -137,6 +140,7 @@ definitions:
       cords:
         items:
           $ref: '#/definitions/model.GeoCordsRequest'
+        minItems: 3
         type: array
       is_active:
         type: boolean
@@ -152,6 +156,7 @@ definitions:
       altitude:
         type: number
       angle:
+        maximum: 359
         minimum: 0
         type: number
       ip:
@@ -167,6 +172,7 @@ definitions:
       radius:
         type: number
       sector_angle:
+        maximum: 359
         minimum: 0
         type: number
     required:
@@ -201,7 +207,6 @@ paths:
             items:
               $ref: '#/definitions/dto.AreaShort'
             type: array
-      summary: Get areas
       tags:
       - Зоны
     post:
@@ -219,32 +224,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.AreaDetailed'
-      summary: Create area
       tags:
       - Зоны
-    put:
-      parameters:
-      - description: Area JSON
-        in: body
-        name: area
-        required: true
-        schema:
-          $ref: '#/definitions/model.UpdateAreaRequest'
-      - description: area id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/dto.AreaDetailed'
-      summary: Update area
-      tags:
-      - Зона
   /area/{area_id}/{camera_id}:
     delete:
       parameters:
@@ -261,7 +242,6 @@ paths:
       responses:
         "200":
           description: OK
-      summary: Delete camera
       tags:
       - Камеры
   /area/{area_id}/camera:
@@ -285,7 +265,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.Camera'
-      summary: Create camera
       tags:
       - Камеры
   /area/{area_id}/camera/{camera_id}:
@@ -308,7 +287,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.Camera'
-      summary: Get camera
       tags:
       - Камеры
     put:
@@ -336,7 +314,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.Camera'
-      summary: Update camera
       tags:
       - Камеры
   /area/{id}:
@@ -350,7 +327,6 @@ paths:
       responses:
         "200":
           description: OK
-      summary: Delete area by id
       tags:
       - Зоны
     get:
@@ -367,7 +343,28 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.AreaDetailed'
-      summary: Get area info
+      tags:
+      - Зоны
+    put:
+      parameters:
+      - description: Area JSON
+        in: body
+        name: area
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateAreaRequest'
+      - description: area id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AreaDetailed'
       tags:
       - Зоны
 swagger: "2.0"

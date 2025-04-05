@@ -27,7 +27,6 @@ const docTemplate = `{
                 "tags": [
                     "Зоны"
                 ],
-                "summary": "Get areas",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -40,41 +39,6 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Зона"
-                ],
-                "summary": "Update area",
-                "parameters": [
-                    {
-                        "description": "Area JSON",
-                        "name": "area",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.UpdateAreaRequest"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "area id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.AreaDetailed"
-                        }
-                    }
-                }
-            },
             "post": {
                 "produces": [
                     "application/json"
@@ -82,7 +46,6 @@ const docTemplate = `{
                 "tags": [
                     "Зоны"
                 ],
-                "summary": "Create area",
                 "parameters": [
                     {
                         "description": "Area JSON",
@@ -112,7 +75,6 @@ const docTemplate = `{
                 "tags": [
                     "Камеры"
                 ],
-                "summary": "Create camera",
                 "parameters": [
                     {
                         "description": "Camera JSON",
@@ -149,7 +111,6 @@ const docTemplate = `{
                 "tags": [
                     "Камеры"
                 ],
-                "summary": "Get camera",
                 "parameters": [
                     {
                         "type": "integer",
@@ -182,7 +143,6 @@ const docTemplate = `{
                 "tags": [
                     "Камеры"
                 ],
-                "summary": "Update camera",
                 "parameters": [
                     {
                         "description": "Camera JSON",
@@ -223,7 +183,6 @@ const docTemplate = `{
                 "tags": [
                     "Камеры"
                 ],
-                "summary": "Delete camera",
                 "parameters": [
                     {
                         "type": "integer",
@@ -255,8 +214,41 @@ const docTemplate = `{
                 "tags": [
                     "Зоны"
                 ],
-                "summary": "Get area info",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AreaDetailed"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Зоны"
+                ],
+                "parameters": [
+                    {
+                        "description": "Area JSON",
+                        "name": "area",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateAreaRequest"
+                        }
+                    },
                     {
                         "type": "integer",
                         "description": "area id",
@@ -278,7 +270,6 @@ const docTemplate = `{
                 "tags": [
                     "Зоны"
                 ],
-                "summary": "Delete area by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -312,7 +303,7 @@ const docTemplate = `{
                         "$ref": "#/definitions/dto.GeoCords"
                     }
                 },
-                "create_date": {
+                "created_date": {
                     "type": "string"
                 },
                 "id": {
@@ -324,7 +315,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "update_date": {
+                "updated_date": {
                     "type": "string"
                 }
             }
@@ -338,7 +329,7 @@ const docTemplate = `{
                         "$ref": "#/definitions/dto.GeoCords"
                     }
                 },
-                "create_date": {
+                "created_date": {
                     "type": "string"
                 },
                 "id": {
@@ -350,7 +341,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "update_date": {
+                "updated_date": {
                     "type": "string"
                 }
             }
@@ -367,7 +358,7 @@ const docTemplate = `{
                 "area_id": {
                     "type": "integer"
                 },
-                "create_date": {
+                "created_date": {
                     "type": "string"
                 },
                 "id": {
@@ -394,7 +385,7 @@ const docTemplate = `{
                 "sector_angle": {
                     "type": "number"
                 },
-                "update_date": {
+                "updated_date": {
                     "type": "string"
                 }
             }
@@ -420,6 +411,7 @@ const docTemplate = `{
             "properties": {
                 "cords": {
                     "type": "array",
+                    "minItems": 3,
                     "items": {
                         "$ref": "#/definitions/model.GeoCordsRequest"
                     }
@@ -451,6 +443,7 @@ const docTemplate = `{
                 },
                 "angle": {
                     "type": "number",
+                    "maximum": 359,
                     "minimum": 0
                 },
                 "ip": {
@@ -473,6 +466,7 @@ const docTemplate = `{
                 },
                 "sector_angle": {
                     "type": "number",
+                    "maximum": 359,
                     "minimum": 0
                 }
             }
@@ -502,6 +496,7 @@ const docTemplate = `{
             "properties": {
                 "cords": {
                     "type": "array",
+                    "minItems": 3,
                     "items": {
                         "$ref": "#/definitions/model.GeoCordsRequest"
                     }
@@ -533,6 +528,7 @@ const docTemplate = `{
                 },
                 "angle": {
                     "type": "number",
+                    "maximum": 359,
                     "minimum": 0
                 },
                 "ip": {
@@ -555,6 +551,7 @@ const docTemplate = `{
                 },
                 "sector_angle": {
                     "type": "number",
+                    "maximum": 359,
                     "minimum": 0
                 }
             }

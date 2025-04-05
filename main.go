@@ -39,12 +39,13 @@ func main() {
 	validate := validator.New()
 
 	cameraStorage := storage.NewCameraStorage(pool)
+	cameraService := service.NewCameraService(cameraStorage)
 
 	areaStorage := storage.NewAreaStorage(pool, cameraStorage)
 	areaService := service.NewAreaService(areaStorage)
 
 	server := &Server{}
-	server.cameraHandler = handler.NewCameraHandler(mux, validate)
+	server.cameraHandler = handler.NewCameraHandler(mux, validate, cameraService)
 	server.areaHandler = handler.NewAreaHandler(mux, validate, areaService)
 
 	fmt.Println("Listening on port 8080")

@@ -48,7 +48,7 @@ func cameraToDto(camera entity.Camera) dto.Camera {
 		Ip:          camera.Ip,
 		IsActive:    camera.IsActive,
 		Latitude:    camera.Latitude,
-		Longitude:   camera.Latitude,
+		Longitude:   camera.Longitude,
 		Name:        camera.Name,
 		Radius:      camera.Radius,
 		SectorAngle: camera.SectorAngle,

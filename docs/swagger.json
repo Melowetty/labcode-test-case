@@ -21,7 +21,6 @@
                 "tags": [
                     "Зоны"
                 ],
-                "summary": "Get areas",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -34,41 +33,6 @@
                     }
                 }
             },
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Зона"
-                ],
-                "summary": "Update area",
-                "parameters": [
-                    {
-                        "description": "Area JSON",
-                        "name": "area",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.UpdateAreaRequest"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "area id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/dto.AreaDetailed"
-                        }
-                    }
-                }
-            },
             "post": {
                 "produces": [
                     "application/json"
@@ -76,7 +40,6 @@
                 "tags": [
                     "Зоны"
                 ],
-                "summary": "Create area",
                 "parameters": [
                     {
                         "description": "Area JSON",
@@ -106,7 +69,6 @@
                 "tags": [
                     "Камеры"
                 ],
-                "summary": "Create camera",
                 "parameters": [
                     {
                         "description": "Camera JSON",
@@ -143,7 +105,6 @@
                 "tags": [
                     "Камеры"
                 ],
-                "summary": "Get camera",
                 "parameters": [
                     {
                         "type": "integer",
@@ -176,7 +137,6 @@
                 "tags": [
                     "Камеры"
                 ],
-                "summary": "Update camera",
                 "parameters": [
                     {
                         "description": "Camera JSON",
@@ -217,7 +177,6 @@
                 "tags": [
                     "Камеры"
                 ],
-                "summary": "Delete camera",
                 "parameters": [
                     {
                         "type": "integer",
@@ -249,8 +208,41 @@
                 "tags": [
                     "Зоны"
                 ],
-                "summary": "Get area info",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AreaDetailed"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Зоны"
+                ],
+                "parameters": [
+                    {
+                        "description": "Area JSON",
+                        "name": "area",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateAreaRequest"
+                        }
+                    },
                     {
                         "type": "integer",
                         "description": "area id",
@@ -272,7 +264,6 @@
                 "tags": [
                     "Зоны"
                 ],
-                "summary": "Delete area by id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -306,7 +297,7 @@
                         "$ref": "#/definitions/dto.GeoCords"
                     }
                 },
-                "create_date": {
+                "created_date": {
                     "type": "string"
                 },
                 "id": {
@@ -318,7 +309,7 @@
                 "name": {
                     "type": "string"
                 },
-                "update_date": {
+                "updated_date": {
                     "type": "string"
                 }
             }
@@ -332,7 +323,7 @@
                         "$ref": "#/definitions/dto.GeoCords"
                     }
                 },
-                "create_date": {
+                "created_date": {
                     "type": "string"
                 },
                 "id": {
@@ -344,7 +335,7 @@
                 "name": {
                     "type": "string"
                 },
-                "update_date": {
+                "updated_date": {
                     "type": "string"
                 }
             }
@@ -361,7 +352,7 @@
                 "area_id": {
                     "type": "integer"
                 },
-                "create_date": {
+                "created_date": {
                     "type": "string"
                 },
                 "id": {
@@ -388,7 +379,7 @@
                 "sector_angle": {
                     "type": "number"
                 },
-                "update_date": {
+                "updated_date": {
                     "type": "string"
                 }
             }
@@ -414,6 +405,7 @@
             "properties": {
                 "cords": {
                     "type": "array",
+                    "minItems": 3,
                     "items": {
                         "$ref": "#/definitions/model.GeoCordsRequest"
                     }
@@ -445,6 +437,7 @@
                 },
                 "angle": {
                     "type": "number",
+                    "maximum": 359,
                     "minimum": 0
                 },
                 "ip": {
@@ -467,6 +460,7 @@
                 },
                 "sector_angle": {
                     "type": "number",
+                    "maximum": 359,
                     "minimum": 0
                 }
             }
@@ -496,6 +490,7 @@
             "properties": {
                 "cords": {
                     "type": "array",
+                    "minItems": 3,
                     "items": {
                         "$ref": "#/definitions/model.GeoCordsRequest"
                     }
@@ -527,6 +522,7 @@
                 },
                 "angle": {
                     "type": "number",
+                    "maximum": 359,
                     "minimum": 0
                 },
                 "ip": {
@@ -549,6 +545,7 @@
                 },
                 "sector_angle": {
                     "type": "number",
+                    "maximum": 359,
                     "minimum": 0
                 }
             }

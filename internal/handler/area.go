@@ -40,7 +40,7 @@ func (a *AreaHandler) initRouter(mux *http.ServeMux) {
 }
 
 // UpdateArea @Summary Update area
-// @Tags Зона
+// @Tags Зоны
 // @Param area  body      model.UpdateAreaRequest  true  "Area JSON"
 // @Param id  path      int  true  "area id"
 // @Produce json

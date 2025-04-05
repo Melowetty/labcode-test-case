@@ -76,7 +76,7 @@ func clearAreaToEntity(area clearArea, cords []entity.GeoCords) entity.Area {
 }
 
 func (s *AreaStorage) getAreasEntityWithoutCoords(ctx context.Context) ([]clearArea, error) {
-	query := `SELECT id, name, is_active, created_date, updated_date FROM area`
+	query := "SELECT id, name, is_active, created_date, updated_date FROM area"
 	rows, err := s.pool.Query(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get areas: %w", err)
@@ -93,7 +93,7 @@ func (s *AreaStorage) getAreasEntityWithoutCoords(ctx context.Context) ([]clearA
 }
 
 func (s *AreaStorage) getCordsByAreaId(ctx context.Context, areaIds ...int) ([]entity.GeoCords, error) {
-	query := `SELECT area_id, latitude, longitude  FROM cord WHERE area_id = any($1)`
+	query := "SELECT area_id, latitude, longitude  FROM cord WHERE area_id = any($1)"
 	rows, err := s.pool.Query(ctx, query, areaIds)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get cords: %w", err)
@@ -110,7 +110,7 @@ func (s *AreaStorage) getCordsByAreaId(ctx context.Context, areaIds ...int) ([]e
 }
 
 func (s *AreaStorage) GetAreaById(ctx context.Context, id int) (entity.AreaDetailed, error) {
-	query := `SELECT id, name, is_active, created_date, updated_date FROM area WHERE id = $1`
+	query := "SELECT id, name, is_active, created_date, updated_date FROM area WHERE id = $1"
 	rows, err := s.pool.Query(ctx, query, id)
 	if err != nil {
 		return entity.AreaDetailed{}, fmt.Errorf("failed to get area: %w", err)
@@ -151,10 +151,7 @@ func (s *AreaStorage) SaveArea(ctx context.Context, area entity.Area) (entity.Ar
 		return entity.AreaDetailed{}, fmt.Errorf("failed to begin tx: %w", err)
 	}
 
-	area.UpdatedDate = time.Now()
-	area.CreatedDate = time.Now()
-
-	query := `INSERT INTO area (name, is_active, created_date, updated_date) VALUES ($1, $2, $3, $4) RETURNING id`
+	query := "INSERT INTO area (name, is_active, created_date, updated_date) VALUES ($1, $2, $3, $4) RETURNING id"
 	err = tx.QueryRow(ctx, query, area.Name, area.IsActive, area.CreatedDate, area.UpdatedDate).Scan(&area.Id)
 	if err != nil {
 		tx.Rollback(ctx)
@@ -162,7 +159,7 @@ func (s *AreaStorage) SaveArea(ctx context.Context, area entity.Area) (entity.Ar
 	}
 
 	batch := pgx.Batch{}
-	query = `INSERT INTO cord (area_id, longitude, latitude) VALUES ($1, $2, $3)`
+	query = "INSERT INTO cord (area_id, longitude, latitude) VALUES ($1, $2, $3)"
 	for _, cord := range area.Cords {
 		batch.Queue(query, area.Id, cord.Longitude, cord.Latitude)
 	}
@@ -186,11 +183,10 @@ func (s *AreaStorage) updateArea(ctx context.Context, area entity.Area) (entity.
 		return entity.AreaDetailed{}, err
 	}
 
-	area.UpdatedDate = time.Now()
 	area.CreatedDate = existsArea.CreatedDate
 
 	batch := pgx.Batch{}
-	query := `UPDATE area SET name = $1, is_active = $2, updated_date = $3 WHERE id = $4`
+	query := "UPDATE area SET name = $1, is_active = $2, updated_date = $3 WHERE id = $4"
 	batch.Queue(query, area.Name, area.IsActive, area.UpdatedDate, area.Id)
 
 	cords, err := s.getCordsByAreaId(ctx, area.Id)
@@ -207,14 +203,14 @@ func (s *AreaStorage) updateArea(ctx context.Context, area entity.Area) (entity.
 		existsCordsFromRequest[fmt.Sprintf("%.6f %.6f", cord.Latitude, cord.Longitude)] = cord
 	}
 
-	deleteQuery := `DELETE FROM cord WHERE area_id = $1 AND latitude = $2 AND longitude = $3`
+	deleteQuery := "DELETE FROM cord WHERE area_id = $1 AND latitude = $2 AND longitude = $3"
 	for key, cord := range existsCordsFromDb {
 		if _, ok := existsCordsFromRequest[key]; !ok {
 			batch.Queue(deleteQuery, area.Id, cord.Latitude, cord.Longitude)
 		}
 	}
 
-	createQuery := `INSERT INTO cord (area_id, longitude, latitude) VALUES ($1, $2, $3)`
+	createQuery := "INSERT INTO cord (area_id, longitude, latitude) VALUES ($1, $2, $3)"
 	for key, cord := range existsCordsFromRequest {
 		if _, ok := existsCordsFromDb[key]; !ok {
 			batch.Queue(createQuery, area.Id, cord.Longitude, cord.Latitude)
@@ -233,7 +229,7 @@ func (s *AreaStorage) updateArea(ctx context.Context, area entity.Area) (entity.
 }
 
 func (s *AreaStorage) DeleteArea(ctx context.Context, id int) error {
-	query := `DELETE FROM area WHERE id = $1`
+	query := "DELETE FROM area WHERE id = $1"
 	res, err := s.pool.Exec(ctx, query, id)
 
 	if err != nil {

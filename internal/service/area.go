@@ -41,6 +41,8 @@ func (a *AreaService) CreateArea(ctx context.Context, request model.CreateAreaRe
 		Name:        request.Name,
 		UpdatedDate: time.Time{},
 	}
+	area.UpdatedDate = time.Now()
+	area.CreatedDate = time.Now()
 
 	result, err := a.areaStorage.SaveArea(ctx, area)
 
@@ -67,6 +69,7 @@ func (a *AreaService) UpdateArea(ctx context.Context, areaId int, request model.
 		Name:        request.Name,
 		UpdatedDate: time.Time{},
 	}
+	area.UpdatedDate = time.Now()
 
 	result, err := a.areaStorage.SaveArea(ctx, area)
 
