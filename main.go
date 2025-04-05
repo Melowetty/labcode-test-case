@@ -39,9 +39,9 @@ func main() {
 	validate := validator.New()
 
 	cameraStorage := storage.NewCameraStorage(pool)
-	cameraService := service.NewCameraService(cameraStorage)
-
 	areaStorage := storage.NewAreaStorage(pool, cameraStorage)
+
+	cameraService := service.NewCameraService(cameraStorage, areaStorage)
 	areaService := service.NewAreaService(areaStorage)
 
 	server := &Server{}

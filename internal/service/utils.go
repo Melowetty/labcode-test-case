@@ -55,3 +55,17 @@ func cameraToDto(camera entity.Camera) dto.Camera {
 		UpdatedDate: camera.UpdatedDate,
 	}
 }
+
+func min(x, y float32) float32 {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+func max(x, y float32) float32 {
+	if x > y {
+		return x
+	}
+	return y
+}

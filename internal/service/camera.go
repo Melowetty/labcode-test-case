@@ -14,12 +14,17 @@ type CameraStorage interface {
 	DeleteCamera(ctx context.Context, cameraId int) error
 }
 
-type CameraService struct {
-	cameraStorage CameraStorage
+type AreaStorageInterface interface {
+	GetAreaCords(ctx context.Context, areaId int) ([]entity.GeoCords, error)
 }
 
-func NewCameraService(storage CameraStorage) *CameraService {
-	service := &CameraService{cameraStorage: storage}
+type CameraService struct {
+	cameraStorage CameraStorage
+	areaStorage   AreaStorageInterface
+}
+
+func NewCameraService(storage CameraStorage, areaStorage AreaStorageInterface) *CameraService {
+	service := &CameraService{cameraStorage: storage, areaStorage: areaStorage}
 	return service
 }
 
@@ -32,6 +37,18 @@ func (c *CameraService) GetCamera(ctx context.Context, areaId int, cameraId int)
 }
 
 func (c *CameraService) CreateCamera(ctx context.Context, areaId int, camera model.CreateCameraRequest) (dto.Camera, error) {
+	areaCords, err := c.areaStorage.GetAreaCords(ctx, areaId)
+
+	if err != nil {
+		return dto.Camera{}, err
+	}
+
+	latitude := camera.Latitude
+	longitude := camera.Longitude
+	if !checkIntersection(*latitude, *longitude, areaCords) {
+		return dto.Camera{}, dto.CameraNotInAreaError
+	}
+
 	entity := entity.Camera{
 		Altitude:    *camera.Altitude,
 		Angle:       *camera.Angle,
@@ -81,4 +98,41 @@ func (c *CameraService) UpdateCamera(ctx context.Context, areaId int, cameraId i
 
 func (c *CameraService) DeleteCamera(ctx context.Context, areaId int, cameraId int) error {
 	return c.cameraStorage.DeleteCamera(ctx, cameraId)
+}
+
+func checkIntersection(latitude, longitude float32, polygon []entity.GeoCords) bool {
+	numVertices := len(polygon)
+	inside := false
+
+	p1 := polygon[0]
+	for i := 1; i <= numVertices; i++ {
+		p2 := polygon[i%numVertices]
+
+		if isPointOnLineSegment(latitude, longitude, p1, p2) {
+			return true
+		}
+
+		if longitude >= min(p1.Longitude, p2.Longitude) && longitude <= max(p1.Longitude, p2.Longitude) {
+			if latitude <= max(p1.Latitude, p2.Latitude) {
+				intersection := (longitude-p1.Longitude)*(p2.Latitude-p1.Latitude)/(p2.Longitude-p1.Longitude) + p1.Latitude
+				if p1.Latitude == p2.Latitude || latitude < intersection {
+					inside = !inside
+				}
+			}
+		}
+		p1 = p2
+	}
+	return inside
+}
+
+func isPointOnLineSegment(latitude, longitude float32, p1, p2 entity.GeoCords) bool {
+	if longitude <= max(p1.Longitude, p2.Longitude) && longitude >= min(p1.Longitude, p2.Longitude) &&
+		latitude <= max(p1.Latitude, p2.Latitude) && latitude >= min(p1.Latitude, p2.Latitude) {
+
+		slope1 := (p2.Latitude - p1.Latitude) * (longitude - p1.Longitude)
+		slope2 := (latitude - p1.Latitude) * (p2.Longitude - p1.Longitude)
+
+		return slope1 == slope2
+	}
+	return false
 }

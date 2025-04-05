@@ -32,7 +32,7 @@ func (s *CameraStorage) GetCamera(ctx context.Context, cameraId int) (entity.Cam
 	camera, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[entity.Camera])
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return entity.Camera{}, dto.AreaNotFoundError.Here().WithUserMessagef("Camera by id %d not found", cameraId)
+			return entity.Camera{}, dto.CameraNotFoundError.Here().WithUserMessagef("Camera by id %d not found", cameraId)
 		}
 		return entity.Camera{}, fmt.Errorf("failed collecting rows: %w", err)
 	}
@@ -87,7 +87,7 @@ func (s *CameraStorage) DeleteCamera(ctx context.Context, cameraId int) error {
 	}
 
 	if res.RowsAffected() == 0 {
-		return dto.AreaNotFoundError.Here().WithUserMessagef("Camera by id %d not found", cameraId)
+		return dto.CameraNotFoundError.Here().WithUserMessagef("Camera by id %d not found", cameraId)
 	}
 
 	return nil

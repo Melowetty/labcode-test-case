@@ -21,6 +21,10 @@ type AreaStorage struct {
 	cameraStorage CameraStorageInterface
 }
 
+func (s *AreaStorage) GetAreaCords(ctx context.Context, areaId int) ([]entity.GeoCords, error) {
+	return s.getCordsByAreaId(ctx, areaId)
+}
+
 type clearArea struct {
 	CreatedDate time.Time `db:"created_date"`
 	Id          int       `db:"id"`
