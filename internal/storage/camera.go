@@ -64,8 +64,8 @@ func (s *CameraStorage) updateCamera(ctx context.Context, camera entity.Camera) 
 		return entity.Camera{}, err
 	}
 
-	query := `UPDATE public.camera SET name=?, altitude=?, angle=?, area_id=?, latitude=?, longitude=?, 
-		radius=?, sector_angle=?, is_active=?, ip=?, updated_date=? WHERE id=?`
+	query := `UPDATE public.camera SET name=$1, altitude=$2, angle=$3, area_id=$4, latitude=$5, longitude=$6, 
+		radius=$7, sector_angle=$8, is_active=$9, ip=$10, updated_date=$11 WHERE id=$12`
 	_, err = s.pool.Query(ctx, query, camera.Name, camera.Altitude, camera.Angle, camera.AreaId, camera.Latitude, camera.Longitude, camera.Radius,
 		camera.SectorAngle, camera.IsActive, camera.Ip, camera.UpdatedDate, camera.Id)
 
