@@ -63,6 +63,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.AreaDetailed"
                         }
+                    },
+                    "400": {
+                        "description": "Validation body error",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
                     }
                 }
             }
@@ -99,6 +105,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.Camera"
                         }
+                    },
+                    "400": {
+                        "description": "Validation body error",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
                     }
                 }
             }
@@ -132,6 +144,18 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.Camera"
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong query params",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
                         }
                     }
                 }
@@ -174,6 +198,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.Camera"
                         }
+                    },
+                    "400": {
+                        "description": "Validation body error",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
                     }
                 }
             }
@@ -202,6 +238,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK"
+                    },
+                    "400": {
+                        "description": "Wrong query params",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
                     }
                 }
             }
@@ -228,6 +276,18 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/dto.AreaDetailed"
+                        }
+                    },
+                    "400": {
+                        "description": "Wrong query params",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
                         }
                     }
                 }
@@ -263,6 +323,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/dto.AreaDetailed"
                         }
+                    },
+                    "400": {
+                        "description": "Validation body error",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
                     }
                 }
             },
@@ -282,6 +354,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK"
+                    },
+                    "400": {
+                        "description": "Wrong query params",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.CustomError"
+                        }
                     }
                 }
             }
@@ -304,19 +388,24 @@ const docTemplate = `{
                     }
                 },
                 "created_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-04-06T03:42:06.553269Z"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 },
                 "is_active": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Perm"
                 },
                 "updated_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-04-06T03:42:06.553269Z"
                 }
             }
         },
@@ -330,19 +419,24 @@ const docTemplate = `{
                     }
                 },
                 "created_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-04-06T03:42:06.553269Z"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 123
                 },
                 "is_active": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Perm"
                 },
                 "updated_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-04-06T03:42:06.553269Z"
                 }
             }
         },
@@ -350,43 +444,56 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "altitude": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 27.8
                 },
                 "angle": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 30.5
                 },
                 "area_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "created_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-04-06T03:42:06.553269Z"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "ip": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "127.0.0.1"
                 },
                 "is_active": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "latitude": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 27.123454
                 },
                 "longitude": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 30.123456
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Enter"
                 },
                 "radius": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 10.5
                 },
                 "sector_angle": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 15.25
                 },
                 "updated_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-04-06T03:42:06.553269Z"
                 }
             }
         },
@@ -468,6 +575,14 @@ const docTemplate = `{
                     "type": "number",
                     "maximum": 359,
                     "minimum": 0
+                }
+            }
+        },
+        "model.CustomError": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         },

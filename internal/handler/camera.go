@@ -45,6 +45,10 @@ func (c *CameraHandler) initRouter(mux *http.ServeMux) {
 // @Param camera_id  path int  true  "camera id"
 // @Produce json
 // @Success 200 {object} dto.Camera
+// @failure 400 {object} model.CustomError "Wrong query params"
+// @failure 400 {object} model.CustomError "Bad body scheme"
+// @failure 400 {object} model.CustomError "Validation body error"
+// @failure 404 {object} model.CustomError "Entity not found"
 // @Router /area/{area_id}/camera/{camera_id} [put]
 func (c *CameraHandler) UpdateCamera(w http.ResponseWriter, r *http.Request) {
 	areaId, cameraId, err := parseAreaIdAndCameraId(c.validate, w, r)
@@ -81,6 +85,8 @@ func (c *CameraHandler) UpdateCamera(w http.ResponseWriter, r *http.Request) {
 // @Param area_id  path int  true  "area id"
 // @Param camera_id  path int  true  "camera id"
 // @Success 200
+// @failure 400 {object} model.CustomError "Wrong query params"
+// @failure 404 {object} model.CustomError "Entity not found"
 // @Router /area/{area_id}/{camera_id} [delete]
 func (c *CameraHandler) DeleteCamera(w http.ResponseWriter, r *http.Request) {
 	areaId, cameraId, err := parseAreaIdAndCameraId(c.validate, w, r)
@@ -105,6 +111,8 @@ func (c *CameraHandler) DeleteCamera(w http.ResponseWriter, r *http.Request) {
 // @Param area_id  path int  true  "area id"
 // @Produce json
 // @Success 200 {object} dto.Camera
+// @failure 400 {object} model.CustomError "Bad body scheme"
+// @failure 400 {object} model.CustomError "Validation body error"
 // @Router /area/{area_id}/camera [post]
 func (c *CameraHandler) CreateCamera(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(c.validate, r, "id")
@@ -142,6 +150,8 @@ func (c *CameraHandler) CreateCamera(w http.ResponseWriter, r *http.Request) {
 // @Param camera_id  path int  true  "camera id"
 // @Produce json
 // @Success 200 {object} dto.Camera
+// @failure 400 {object} model.CustomError "Wrong query params"
+// @failure 404 {object} model.CustomError "Entity not found"
 // @Router /area/{area_id}/camera/{camera_id} [get]
 func (c *CameraHandler) GetCamera(w http.ResponseWriter, r *http.Request) {
 	areaId, cameraId, err := parseAreaIdAndCameraId(c.validate, w, r)

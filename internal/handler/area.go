@@ -45,6 +45,10 @@ func (a *AreaHandler) initRouter(mux *http.ServeMux) {
 // @Param id  path      int  true  "area id"
 // @Produce json
 // @Success 200 {object} dto.AreaDetailed
+// @failure 400 {object} model.CustomError "Wrong query params"
+// @failure 400 {object} model.CustomError "Bad body scheme"
+// @failure 400 {object} model.CustomError "Validation body error"
+// @failure 404 {object} model.CustomError "Entity not found"
 // @Router /area/{id} [put]
 func (a *AreaHandler) UpdateArea(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(a.validate, r, "id")
@@ -80,6 +84,8 @@ func (a *AreaHandler) UpdateArea(w http.ResponseWriter, r *http.Request) {
 // @Tags Зоны
 // @Param        id  path      int  true  "area id"
 // @Success      200
+// @failure 400 {object} model.CustomError "Wrong query params"
+// @failure 404 {object} model.CustomError "Entity not found"
 // @Router       /area/{id} [delete]
 func (a *AreaHandler) DeleteArea(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(a.validate, r, "id")
@@ -103,6 +109,8 @@ func (a *AreaHandler) DeleteArea(w http.ResponseWriter, r *http.Request) {
 // @Param area  body      model.CreateAreaRequest  true  "Area JSON"
 // @Produce json
 // @Success 200 {object} dto.AreaDetailed
+// @failure 400 {object} model.CustomError "Bad body scheme"
+// @failure 400 {object} model.CustomError "Validation body error"
 // @Router /area [post]
 func (a *AreaHandler) CreateArea(w http.ResponseWriter, r *http.Request) {
 	var request model.CreateAreaRequest
@@ -149,6 +157,8 @@ func (a *AreaHandler) GetAreasInfo(w http.ResponseWriter, r *http.Request) {
 // @Param        id  path      int  true  "area id"
 // @Produce json
 // @Success 200 {object} dto.AreaDetailed
+// @failure 400 {object} model.CustomError "Wrong query params"
+// @failure 404 {object} model.CustomError "Entity not found"
 // @Router /area/{id} [get]
 func (a *AreaHandler) GetAreaInfo(w http.ResponseWriter, r *http.Request) {
 	areaId, err := parsePathValueAsInt(a.validate, r, "id")

@@ -11,14 +11,19 @@ definitions:
           $ref: '#/definitions/dto.GeoCords'
         type: array
       created_date:
+        example: "2025-04-06T03:42:06.553269Z"
         type: string
       id:
+        example: 123
         type: integer
       is_active:
+        example: true
         type: boolean
       name:
+        example: Perm
         type: string
       updated_date:
+        example: "2025-04-06T03:42:06.553269Z"
         type: string
     type: object
   dto.AreaShort:
@@ -28,43 +33,61 @@ definitions:
           $ref: '#/definitions/dto.GeoCords'
         type: array
       created_date:
+        example: "2025-04-06T03:42:06.553269Z"
         type: string
       id:
+        example: 123
         type: integer
       is_active:
+        example: true
         type: boolean
       name:
+        example: Perm
         type: string
       updated_date:
+        example: "2025-04-06T03:42:06.553269Z"
         type: string
     type: object
   dto.Camera:
     properties:
       altitude:
+        example: 27.8
         type: number
       angle:
+        example: 30.5
         type: number
       area_id:
+        example: 1
         type: integer
       created_date:
+        example: "2025-04-06T03:42:06.553269Z"
         type: string
       id:
+        example: 1
         type: integer
       ip:
+        example: 127.0.0.1
         type: string
       is_active:
+        example: true
         type: boolean
       latitude:
+        example: 27.123454
         type: number
       longitude:
+        example: 30.123456
         type: number
       name:
+        example: Enter
         type: string
       radius:
+        example: 10.5
         type: number
       sector_angle:
+        example: 15.25
         type: number
       updated_date:
+        example: "2025-04-06T03:42:06.553269Z"
         type: string
     type: object
   dto.GeoCords:
@@ -124,6 +147,11 @@ definitions:
     - name
     - radius
     - sector_angle
+    type: object
+  model.CustomError:
+    properties:
+      message:
+        type: string
     type: object
   model.GeoCordsRequest:
     properties:
@@ -224,6 +252,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.AreaDetailed'
+        "400":
+          description: Validation body error
+          schema:
+            $ref: '#/definitions/model.CustomError'
       tags:
       - Зоны
   /area/{area_id}/{camera_id}:
@@ -242,6 +274,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Wrong query params
+          schema:
+            $ref: '#/definitions/model.CustomError'
+        "404":
+          description: Entity not found
+          schema:
+            $ref: '#/definitions/model.CustomError'
       tags:
       - Камеры
   /area/{area_id}/camera:
@@ -265,6 +305,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.Camera'
+        "400":
+          description: Validation body error
+          schema:
+            $ref: '#/definitions/model.CustomError'
       tags:
       - Камеры
   /area/{area_id}/camera/{camera_id}:
@@ -287,6 +331,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.Camera'
+        "400":
+          description: Wrong query params
+          schema:
+            $ref: '#/definitions/model.CustomError'
+        "404":
+          description: Entity not found
+          schema:
+            $ref: '#/definitions/model.CustomError'
       tags:
       - Камеры
     put:
@@ -314,6 +366,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.Camera'
+        "400":
+          description: Validation body error
+          schema:
+            $ref: '#/definitions/model.CustomError'
+        "404":
+          description: Entity not found
+          schema:
+            $ref: '#/definitions/model.CustomError'
       tags:
       - Камеры
   /area/{id}:
@@ -327,6 +387,14 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Wrong query params
+          schema:
+            $ref: '#/definitions/model.CustomError'
+        "404":
+          description: Entity not found
+          schema:
+            $ref: '#/definitions/model.CustomError'
       tags:
       - Зоны
     get:
@@ -343,6 +411,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.AreaDetailed'
+        "400":
+          description: Wrong query params
+          schema:
+            $ref: '#/definitions/model.CustomError'
+        "404":
+          description: Entity not found
+          schema:
+            $ref: '#/definitions/model.CustomError'
       tags:
       - Зоны
     put:
@@ -365,6 +441,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/dto.AreaDetailed'
+        "400":
+          description: Validation body error
+          schema:
+            $ref: '#/definitions/model.CustomError'
+        "404":
+          description: Entity not found
+          schema:
+            $ref: '#/definitions/model.CustomError'
       tags:
       - Зоны
 swagger: "2.0"
