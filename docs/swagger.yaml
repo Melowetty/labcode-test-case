@@ -376,6 +376,22 @@ paths:
             $ref: '#/definitions/model.CustomError'
       tags:
       - Камеры
+  /area/{area_id}/camera/{camera_id}/stream:
+    post:
+      parameters:
+      - description: area id
+        in: path
+        name: area_id
+        required: true
+        type: integer
+      - description: camera id
+        in: path
+        name: camera_id
+        required: true
+        type: integer
+      responses: {}
+      tags:
+      - Камеры
   /area/{id}:
     delete:
       parameters:

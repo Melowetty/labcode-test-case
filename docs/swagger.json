@@ -208,6 +208,30 @@
                 }
             }
         },
+        "/area/{area_id}/camera/{camera_id}/stream": {
+            "post": {
+                "tags": [
+                    "Камеры"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "area id",
+                        "name": "area_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "camera id",
+                        "name": "camera_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/area/{area_id}/{camera_id}": {
             "delete": {
                 "tags": [

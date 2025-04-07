@@ -2,8 +2,10 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/go-playground/validator/v10"
+	"github.com/pion/webrtc/v3"
 	"labcode-test-case/internal/dto"
 	"labcode-test-case/internal/handler/model"
 	"net/http"
@@ -16,17 +18,22 @@ type CameraServiceInterface interface {
 	DeleteCamera(ctx context.Context, areaId int, cameraId int) error
 }
 
+type CameraStreamServiceInterface interface {
+	GetCameraStream(areaId int, cameraId int, offer webrtc.SessionDescription) (webrtc.SessionDescription, error)
+}
+
 type CameraHandler struct {
-	validate      *validator.Validate
-	cameraService CameraServiceInterface
+	validate            *validator.Validate
+	cameraService       CameraServiceInterface
+	cameraStreamService CameraStreamServiceInterface
 }
 
 const (
 	cameraIdValidatorError = "camera id must be integer and greater than 0"
 )
 
-func NewCameraHandler(mux *http.ServeMux, validate *validator.Validate, cameraService CameraServiceInterface) *CameraHandler {
-	controller := &CameraHandler{validate: validate, cameraService: cameraService}
+func NewCameraHandler(mux *http.ServeMux, validate *validator.Validate, cameraService CameraServiceInterface, cameraStreamService CameraStreamServiceInterface) *CameraHandler {
+	controller := &CameraHandler{validate: validate, cameraService: cameraService, cameraStreamService: cameraStreamService}
 	controller.initRouter(mux)
 	return controller
 }
@@ -36,6 +43,7 @@ func (c *CameraHandler) initRouter(mux *http.ServeMux) {
 	mux.HandleFunc("POST /area/{id}/camera", c.CreateCamera)
 	mux.HandleFunc("DELETE /area/{id}/camera/{camera_id}", c.DeleteCamera)
 	mux.HandleFunc("PUT /area/{id}/camera/{camera_id}", c.UpdateCamera)
+	mux.HandleFunc("POST /area/{id}/camera/{camera_id}/stream", c.GetCameraStream)
 }
 
 // UpdateCamera @Summary Update camera
@@ -167,6 +175,33 @@ func (c *CameraHandler) GetCamera(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeOkJsonResponse(w, camera)
+}
+
+// GetCameraStream @Summary Get camera stream
+// @Tags Камеры
+// @Param area_id  path int  true  "area id"
+// @Param camera_id  path int  true  "camera id"
+// @Router /area/{area_id}/camera/{camera_id}/stream [post]
+func (c *CameraHandler) GetCameraStream(w http.ResponseWriter, r *http.Request) {
+	areaId, cameraId, err := parseAreaIdAndCameraId(c.validate, w, r)
+	if err != nil {
+		writeError(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	offer := webrtc.SessionDescription{}
+	if err := json.NewDecoder(r.Body).Decode(&offer); err != nil {
+		processErrorResponse(w, err)
+		return
+	}
+
+	description, err := c.cameraStreamService.GetCameraStream(areaId, cameraId, offer)
+	if err != nil {
+		processErrorResponse(w, err)
+		return
+	}
+
+	writeOkJsonResponse(w, description)
 }
 
 func parseAreaIdAndCameraId(validate *validator.Validate, w http.ResponseWriter, r *http.Request) (int, int, error) {

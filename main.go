@@ -43,10 +43,13 @@ func main() {
 
 	cameraService := service.NewCameraService(cameraStorage, areaStorage)
 	areaService := service.NewAreaService(areaStorage)
+	cameraStreamService := service.NewCameraStreamService()
 
 	server := &Server{}
-	server.cameraHandler = handler.NewCameraHandler(mux, validate, cameraService)
+	server.cameraHandler = handler.NewCameraHandler(mux, validate, cameraService, cameraStreamService)
 	server.areaHandler = handler.NewAreaHandler(mux, validate, areaService)
+
+	mux.Handle("/", http.FileServer(http.Dir("./static/")))
 
 	fmt.Println("Listening on port 8080")
 	http.ListenAndServe(":8080", mux)

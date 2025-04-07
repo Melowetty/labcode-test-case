@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebRTC Stream</title>
+    <style>
+        video {
+            width: 640px;
+            height: 480px;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+<div id="videos"></div>
+<button onclick="startStream('remoteVideo', 1)">Start Stream 1</button>
+<button onclick="startStream('remoteVideo2', 2)">Start Stream 2</button>
+<script src="webrtc.js"></script>
+</body>
+</html>
